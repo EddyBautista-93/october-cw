@@ -1,6 +1,8 @@
-﻿using System.Data;
-using Internal;
-using System;
+﻿using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace october_cw
 {
@@ -17,11 +19,32 @@ namespace october_cw
     {
         public static string[] MostFrequentDays(int year)
         {
-            return new string[0];
+            var days = new Dictionary<string, int>
+            {
+                { "Monday", 0 },
+                { "Tuesday", 0 },
+                { "Wednesday", 0 },
+                { "Thursday", 0 },
+                { "Friday", 0 },
+                { "Saturday", 0 },
+                { "Sunday", 0 }
+            };
+
+            var y = new DateTime(year, 1, 1, new GregorianCalendar());
+
+            while(y.Year.Equals(year))
+            {
+                days[y.DayOfWeek.ToString()]++;
+                year = y.AddDays(1);
+            }
+            return days.Where(x => x.Value.Equals(days.Max(t => t.Value))).Select(x => x.Key).ToArray();
+
         }
+
+
         static void Main(string[] args)
         {
-
+         MostFrequentDays(2923);
 
         }
     }
